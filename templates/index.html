@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Park Status</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #212121; /* Darker gray */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('https://imageurl.com/interesting-background.jpg'); /* Replace with your background image URL */
+            background-size: cover;
+        }
+        #github-link {
+            margin-top: 20px;
+            color: #90a4ae; /* Light bluish-gray */
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #github-icon {
+            color: #ffffff; /* White */
+            margin-right: 10px;
+            font-size: 1.5em; /* Adjust the font size as needed */
+        }
+
+        #github-link a {
+            color: #90a4ae; /* Light bluish-gray */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #github-link a:hover {
+            color: #ffffff; /* White on hover */
+        }
+
+        h1 {
+            color: #ffffff; /* White */
+            margin-bottom: 15px;
+            font-size: 3em; /* Adjust the font size as needed */
+        }
+    
+        #tagline {
+            color: #90a4ae; /* Light bluish-gray */
+            margin-bottom: 20px;
+        }
+    
+        #parking-status {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 80%; /* Adjust the width as needed */
+        }
+    
+        .parking-slot {
+            margin: 10px;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: #196a90; /* Darker blue-gray */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            flex-grow: 1;
+            text-align: center;
+            color: #fff;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+    
+        .parking-slot:hover {
+            background-color: #00496d; /* Lighter blue-gray on hover */
+            transform: scale(1.05);
+        }
+
+        .slot-status {
+            font-size: 1.5em;
+            margin-top: 20px;
+            color: #b0bec5; /* Lighter bluish-gray */
+        }
+
+        .animate-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(0.8);
+            }
+        }
+
+        #control-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-around;
+            width: 60%;
+        }
+
+        .action-button {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #607d8b; /* Slightly darker blue-gray on hover */
+        }
+
+        .fa-car {
+            color: #fbc02d; /* Yellow */
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Car Park Status</h1>
+    <p id="tagline">Real-time Parking Availability</p>
+    <div id="parking-status">
+        {% for data in parking_status %}
+            <div class="parking-slot" onclick="alert('Slot {{ data.slot }} clicked!')">
+                <p>Slot {{ data.slot }}: <span id="slot{{ data.slot }}" class="slot-status">{{ data.status }}</span></p>
+                {% if data.status == 'Vacant' %}
+                    <div class="animate-pulse"></div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="control-buttons">
+        <button class="action-button" onclick="simulateCarArrival()"><i class="fas fa-car"></i> Arrive at Parking</button>
+        <button class="action-button" onclick="alert('Navigate to your parking')"><i class="fas fa-map-marked-alt"></i> Navigate</button>
+        <!-- Replace the history button with your creative element -->
+        <button class="action-button" onclick="alert('Test Button')"><i class="fas fa-lightbulb"></i> Test Button</button>
+    </div>
+
+    <div id="github-link">
+        <i id="github-icon" class="fab fa-github"></i>
+        <a href="https://github.com/navadeepnaidu7">Github repo for this project</a>
+    </div>
+
+    <script>
+        // Connect to the Socket.IO server
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
+    
+        // Listen for the 'update_status' event
+        socket.on('update_status', function(data) {
+            // Update the corresponding slot dynamically
+            var parkingStatusDiv = document.getElementById('parking-status');
+            parkingStatusDiv.innerHTML = '';  // Clear previous content
+
+            for (var i = 0; i < data.parking_status.length; i++) {
+                var slotElement = document.createElement('div');
+                slotElement.classList.add('parking-slot');
+                slotElement.innerHTML = "<p>Slot " + (i + 1) + ": <span id='slot" + (i + 1) + "' class='slot-status'>" + data.parking_status[i] + "</span></p>";
+                parkingStatusDiv.appendChild(slotElement);
+
+                if (data.parking_status[i] === 'Vacant') {
+                    var pulseElement = document.createElement('div');
+                    pulseElement.classList.add('animate-pulse');
+                    slotElement.appendChild(pulseElement);
+                }
+            }
+        });
+
+        // Simulate a car arriving at the parking
+        function simulateCarArrival() {
+            alert('A car has arrived at the parking!');
+            // You can add further logic here to update the parking status accordingly
+        }
+    </script>
+</body>
+</html>
