@@ -43,6 +43,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For issues or inquiries, please contact [Navadeep Naidu](https://github.com/navadeepnaidu.me).
+For issues or inquiries, please contact [Navadeep Naidu](https://github.com/navadeepnaidu7).
 
 --
