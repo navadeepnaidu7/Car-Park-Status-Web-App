@@ -1,0 +1,27 @@
+<!-- body.html -->
+<body>
+    <h1>Car Park Status</h1>
+    <p id="tagline">Real-time Parking Availability</p>
+    <div id="parking-status">
+        {% for data in parking_status %}
+            <div class="parking-slot" onclick="alert('This is Slot {{ data.slot }} !')">
+                <p>Slot {{ data.slot }}: <span id="slot{{ data.slot }}" class="slot-status">{{ data.status }}</span></p>
+                {% if data.status == 'Vacant' %}
+                    <div class="animate-pulse"></div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="control-buttons">
+        <button class="action-button" onclick="simulateCarArrival()"><i class="fas fa-car"></i> Arrive at Parking</button>
+        <a href="https://www.google.com/maps/place/Vit+ap+parking+lot+2/@16.4966472,80.4997217,19.87z/data=!4m6!3m5!1s0x3a35f361a6c56ab7:0xd81593a274822b23!8m2!3d16.4968029!4d80.4997585!16s%2Fg%2F11y1n1c631?entry=ttu" target="_blank" class="action-button" style="background-color: #ffffff; color: #212121;"><i class="fas fa-map-marked-alt"></i> Navigate</a>
+        <!-- Replace the history button with your creative element -->
+        <button class="action-button" onclick="alert('Test Button')"><i class="fas fa-lightbulb"></i> Test Button</button>
+    </div>
+    
+    <div id="github-link">
+        <i id="github-icon" class="fab fa-github"></i>
+        <a href="https://github.com/navadeepnaidu7">Github repo for this project</a>
+    </div>
+</body>

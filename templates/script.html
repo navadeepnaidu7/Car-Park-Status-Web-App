@@ -1,0 +1,30 @@
+<!-- script.html -->
+<script>
+     // Auto-refresh the page every 3 seconds
+    setInterval(function () {
+    location.reload();
+    }, 3000);
+    
+    // Connect to the Socket.IO server
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
+
+    // Listen for the 'update_status' event
+    socket.on('update_status', function(data) {
+        // Update the corresponding slot dynamically
+        var parkingStatusDiv = document.getElementById('parking-status');
+        parkingStatusDiv.innerHTML = '';  // Clear previous content
+
+        for (var i = 0; i < data.parking_status.length; i++) {
+            var slotElement = document.createElement('div');
+            slotElement.classList.add('parking-slot');
+            slotElement.innerHTML = "<p>Slot " + (i + 1) + ": <span id='slot" + (i + 1) + "' class='slot-status'>" + data.parking_status[i] + "</span></p>";
+            parkingStatusDiv.appendChild(slotElement);
+
+            if (data.parking_status[i] === 'Vacant') {
+                var pulseElement = document.createElement('div');
+                pulseElement.classList.add('animate-pulse');
+                slotElement.appendChild(pulseElement);
+            }
+        }
+    });
+</script>
