@@ -24,10 +24,11 @@ This web application provides real-time information about the parking status usi
 ## Setup Instructions
 
 1. Clone the repository.
-2. Set up the Flask server(test.py) on your preferred environment.
-3. Flash the MicroPython code(main.py) to your Pico device.
-4. Update the necessary configurations in the code.
-5. Run the Flask server and open the web application.
+2. Set up the Flask server(flask.py) in vs code or your preferred environment.
+3. Flash the MicroPython code(main.py) and internt.py to your Pico device.
+4. First connect the Pico W to internet by running internet.py
+5. Update the necessary configurations in the code like IP addresses, SSID and passwords.
+6. Run the Flask server and open the web application(The IP will be visible on terminal of flask.py).
 
 ## Usage
 
