@@ -25,7 +25,7 @@ while True:
 
     # Send the data to the Flask server using urequests
     try:
-        response = urequests.post('http://192.168.170.93:5000/status', json=current_states)
+        response = urequests.post('http://{IP ADDRESS OF YOUR DESKTOP PC}/status', json=current_states)
         print("Server Response:", response.text)  # Debugging line
         response.close()
     except Exception as e:
