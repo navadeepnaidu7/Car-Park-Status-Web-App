@@ -23,8 +23,8 @@ def connect_to_wifi(ssid, password):
             print('Failed to connect to WiFi within the timeout period.')
 
 # Replace 'your_wifi_ssid' and 'your_wifi_password' with your actual Wi-Fi credentials
-wifi_ssid = 'ssid'
-wifi_password = 'password'
+wifi_ssid = 'your_wifi_ssid'
+wifi_password = 'your_wifi_password'
 
 connect_to_wifi(wifi_ssid, wifi_password)
 
