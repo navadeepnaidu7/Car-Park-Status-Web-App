@@ -1,5 +1,3 @@
-# parking-status-project
-
 # Car Park Status Web App
 
 Real-time Parking Availability Web Application with IoT Integration.
